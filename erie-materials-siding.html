@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Erie Materials — Exterior Siding Catalog</title>
+<style>
+  :root {
+    --primary: #1a3a5c;
+    --accent: #e05c00;
+    --flag-color: #d32f2f;
+    --flag-bg: #fde8e8;
+    --card-bg: #fff;
+    --page-bg: #f4f6f9;
+    --border: #dde2ea;
+    --text: #222;
+    --muted: #666;
+    --green: #2e7d32;
+    --green-bg: #e8f5e9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--page-bg); color: var(--text); }
+
+  header {
+    background: var(--primary);
+    color: #fff;
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  }
+  header h1 { font-size: 1.7rem; font-weight: 700; }
+  header p { font-size: 0.95rem; opacity: 0.8; margin-top: 4px; }
+  .header-logo {
+    background: #fff;
+    color: var(--primary);
+    font-weight: 900;
+    font-size: 1.1rem;
+    padding: 8px 14px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  .controls {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 32px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+  .controls label { font-size: 0.85rem; color: var(--muted); margin-right: 4px; }
+  .controls select, .controls input[type=checkbox] { font-size: 0.9rem; }
+  .controls select { padding: 6px 10px; border: 1px solid var(--border); border-radius: 5px; }
+  .filter-group { display: flex; align-items: center; gap: 6px; }
+  .count-badge {
+    background: var(--primary);
+    color: #fff;
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 0.82rem;
+    margin-left: auto;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 24px;
+    padding: 28px 32px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.13); }
+  .card.hidden { display: none; }
+
+  .card-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: #e8edf3;
+    display: block;
+  }
+  .card-img-placeholder {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, #d0daea 0%, #b8c8e0 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: #7a92b0;
+  }
+
+  .card-badges {
+    display: flex;
+    gap: 6px;
+    padding: 10px 14px 0;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .badge-supplier { background: #e3eaf6; color: var(--primary); }
+  .badge-flag {
+    background: var(--flag-bg);
+    color: var(--flag-color);
+    border: 1px solid #f5b8b8;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.75; }
+  }
+  .badge-material { background: #fdf3e3; color: #8a5000; }
+  .badge-exterior { background: var(--green-bg); color: var(--green); }
+
+  .card-body { padding: 14px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+  .card-title { font-size: 1.05rem; font-weight: 700; color: var(--primary); line-height: 1.3; }
+  .card-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+
+  .specs-table {
+    width: 100%;
+    font-size: 0.82rem;
+    border-collapse: collapse;
+    margin-top: 2px;
+  }
+  .specs-table td {
+    padding: 4px 6px;
+    border-bottom: 1px solid #f0f2f6;
+    vertical-align: top;
+  }
+  .specs-table td:first-child {
+    font-weight: 600;
+    color: var(--muted);
+    width: 38%;
+    white-space: nowrap;
+  }
+
+  .cost-box {
+    background: linear-gradient(135deg, #1a3a5c 0%, #225088 100%);
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+  }
+  .cost-label { font-size: 0.78rem; opacity: 0.8; }
+  .cost-value { font-size: 1.25rem; font-weight: 700; }
+  .cost-note { font-size: 0.72rem; opacity: 0.7; text-align: right; max-width: 55%; line-height: 1.3; }
+
+  .colors-section { margin-top: 4px; }
+  .colors-label { font-size: 0.78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .color-swatches { display: flex; flex-wrap: wrap; gap: 5px; }
+  .swatch {
+    width: 24px; height: 24px; border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.12);
+    title: attr(title);
+    cursor: default;
+    position: relative;
+  }
+  .swatch:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #fff;
+    padding: 3px 7px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .paintable-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #f3f9f4;
+    border: 1px solid #b8d9bc;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.82rem;
+    color: var(--green);
+    font-weight: 600;
+  }
+  .not-paintable-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.82rem;
+    color: #555;
+    font-weight: 600;
+  }
+
+  .flag-strip {
+    background: var(--flag-bg);
+    border-top: 2px solid #f5b8b8;
+    padding: 6px 14px;
+    font-size: 0.78rem;
+    color: var(--flag-color);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .disclaimer {
+    background: #fffbf0;
+    border: 1px solid #ffe4a0;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 0.82rem;
+    color: #7a5c00;
+    margin: 0 32px 24px;
+    line-height: 1.5;
+    max-width: 1540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  footer {
+    background: var(--primary);
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 18px;
+    font-size: 0.8rem;
+    margin-top: 16px;
+  }
+
+  @media (max-width: 600px) {
+    .grid { padding: 16px; grid-template-columns: 1fr; }
+    .controls { padding: 12px 16px; }
+    header { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-logo">ERIE<br>MATERIALS</div>
+  <div>
+    <h1>Exterior Siding Catalog</h1>
+    <p>Suppliers &amp; Products Available Through Erie Materials &bull; eriematerials.com &bull; Updated April 2026</p>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="filter-group">
+    <label for="filterSupplier">Supplier:</label>
+    <select id="filterSupplier" onchange="applyFilters()">
+      <option value="">All Suppliers</option>
+      <option value="CertainTeed">CertainTeed</option>
+      <option value="Wolverine">Wolverine</option>
+      <option value="Foundry">Foundry Specialty</option>
+      <option value="Tando">Tando</option>
+      <option value="Everlast">Everlast</option>
+      <option value="James Hardie">James Hardie</option>
+      <option value="LP SmartSide">LP SmartSide</option>
+      <option value="Alsco">Alsco Metals</option>
+      <option value="Cedar Valley">Cedar Valley</option>
+      <option value="RISE">RISE Building Products</option>
+      <option value="Versetta Stone">Versetta Stone</option>
+      <option value="Azek">Azek Captivate</option>
+      <option value="TruExterior">TruExterior</option>
+      <option value="Vesta Steel">Vesta Steel</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label for="filterMaterial">Material:</label>
+    <select id="filterMaterial" onchange="applyFilters()">
+      <option value="">All Materials</option>
+      <option value="Vinyl">Vinyl</option>
+      <option value="Fiber Cement">Fiber Cement</option>
+      <option value="Composite">Composite</option>
+      <option value="Engineered Wood">Engineered Wood</option>
+      <option value="Aluminum">Aluminum</option>
+      <option value="Steel">Steel</option>
+      <option value="Cedar">Cedar</option>
+      <option value="Stone">Stone / Masonry</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <input type="checkbox" id="filterFlag" onchange="applyFilters()">
+    <label for="filterFlag">&#128681; 9 Feet or Longer Only</label>
+  </div>
+  <div class="filter-group">
+    <input type="checkbox" id="filterPaintable" onchange="applyFilters()">
+    <label for="filterPaintable">Paintable Only</label>
+  </div>
+  <span class="count-badge" id="countBadge">Loading...</span>
+</div>
+
+<div style="padding: 20px 32px 0; max-width: 1600px; margin: 0 auto;">
+  <div class="disclaimer">
+    <strong>&#9432; Pricing Disclosure:</strong> Erie Materials does not publish retail pricing online — all pricing shown is estimated typical contractor/market pricing (per square foot of coverage) based on publicly available industry data as of early 2026. Prices vary by region, order volume, and current surcharges. Contact your local Erie Materials branch for accurate quotes. Price increases of 4–8% were announced by several suppliers effective Q1 2026. &bull;
+    <strong>Image Note:</strong> Product images are sourced from manufacturer websites.
+  </div>
+</div>
+
+<div class="grid" id="productGrid">
+</div>
+
+<footer>
+  Data sourced from Erie Materials 2025/2026 product catalog, manufacturer websites, and industry pricing databases. &copy; 2026 Erie Materials catalog reference page.
+</footer>
+
+<script>
+const products = [
+
+  // ========= PRODUCT DATA =========
+  {
+    id: 1, supplier: 'CertainTeed', name: 'Monogram® XL Siding',
+    material: 'Vinyl', profile: '4", 5" Dutch Lap or Clapboard',
+    thickness: '.046"', width: '5"', length: '25 ft',
+    lengthFt: 25, flag9ft: true, exteriorSiding: true,
+    paintable: false, paintableNote: 'Integral color — not paintable',
+    colorCount: 39, colorNames: ['Sterling Gray','Hearthstone','Cotton White','Chestnut','Autumn Red','Navajo Beige','Wedgewood Blue','Coastal Sage'],
+    colorHex:   ['#a0a8a8','#8c7355','#f5f0e8','#a07848','#a04030','#d4c8a8','#6080a0','#7a9070'],
+    warranty: 'Lifetime Limited',
+    costLow: 1.10, costHigh: 1.40,
+    desc: 'Premium vinyl siding with True Texture Woodgrain finish. XL 25-ft planks dramatically reduce seams. ¾" panel projection. Most authentic woodgrain in the industry.',
+    specs: [['Profile','4" & 5" Clapboard / Dutch Lap'],['Thickness','.046"'],['Panel Length','25 ft (XL)'],['Projection','¾"'],['Fire Rating','Class A'],['Warranty','Lifetime Limited']],
+    imgUrl: 'https://www.certainteed.com/content/dam/certainteed/products/siding/monogram/monogram-5-dutch-lap-sterling-gray.jpg',
+    sourceUrl: 'https://www.certainteed.com/siding/monogram/'
+  },
+  {
+    id: 2, supplier: 'CertainTeed', name: 'Northwoods® Vinyl Shake',
+    material: 'Vinyl', profile: '7" Straight Edge / 7" Rough-Split / 9" Staggered',
+    thickness: '.050"', width: 'Panel format', length: 'Panel (approx 4 ft)',
+    lengthFt: 4, flag9ft: false, exteriorSiding: true,
+    paintable: false, paintableNote: 'Integral color — not paintable',
+    colorCount: 17, colorNames: [],colorHex:[],
+    warranty: 'Lifetime Limited',
+    costLow: 0.90, costHigh: 1.20,
+    desc: 'Continuous vacuum-formed vinyl shake panels replicating natural cedar. Class 1(A) fire rating. 3/4–1" panel projection. Available in three shake profiles.',
+    specs: [['Profile','7" Straight, 7" Rough-Split, 9" Staggered'],['Thickness','.050"'],['Projection','3/4"-1"'],['Fire Rating','Class 1(A) / Class A'],['Colors','17'],['Warranty','Lifetime Limited']],
+    imgUrl: '', sourceUrl: 'https://www.certainteed.com/siding/northwoods/'
+  },
+  {
+    id: 3, supplier: 'CertainTeed', name: 'CedarBoards™ Insulated Siding',
+    material: 'Vinyl', profile: 'Clapboard / Dutch Lap + Foam Insulation Backer',
+    thickness: 'Insulated (R-2.0 to R-2.7)', width: 'Multiple', length: 'Standard + XL lengths',
+    lengthFt: 16, flag9ft: true, exteriorSiding: true,
+    paintable: false, paintableNote: 'Integral color — not paintable',
+    colorCount: 20, colorNames: [],colorHex:[],
+    warranty: 'Lifetime Limited',
+    costLow: 1.20, costHigh: 1.60,
+    desc: 'Cedar-look vinyl siding with integral foam backer. R-Value 2.0–2.7 improves wall insulation. XL lengths available to reduce seams. Authentic woodgrain emboss.',
+    specs: [['Profile','Clapboard / Dutch Lap'],['R-Value','2.0–2.7'],['Backer','Integral foam insulation'],['Available Lengths','Standard + XL'],['Warranty','Lifetime Limited']],
+    imgUrl: '', sourceUrl: 'https://www.certainteed.com/siding/cedarboards-insulated/'
+  },
+  {
+    id: 4, supplier: 'CertainTeed', name: 'Restoration Classic™ Siding',
+    material: 'Vinyl', profile: 'Horizontal Lap',
+    thickness: '.044"', width: '4" or 5"', length: 'Standard (12 ft)',
+    lengthFt: 12, flag9ft: true, exteriorSiding: true,
+    paintable: false, paintableNote: 'Integral color — not paintable',
+    colorCount: 24, colorNames: [],colorHex:[],
+    warranty: 'Limited Lifetime',
+    costLow: 0.55, costHigh: 0.80,
+    desc: 'Classic horizontal vinyl lap siding. Mid-tier product with durable woodgrain texture and full range of popular colors. Reliable performer for residential new construction and re-siding.',
+    specs: [['Profile','Horizontal Lap'],['Thickness','.044"'],['Length','12 ft standard'],['Warranty','Limited Lifetime']],
+    imgUrl: '', sourceUrl: 'https://www.certainteed.com/siding/restoration-classic/'
+  },
+  {
+    id: 5, supplier: 'CertainTeed', name: 'Cedar Impressions® 3G Shake & Shingle',
+    material: 'Vinyl', profile: 'Perfection Shingles / Rough-Split Shakes / Sawmill Shingles',
+    thickness: 'Panel', width: 'Panel format', length: 'Panel (approx 4 ft)',
+    lengthFt: 4, flag9ft: false, exteriorSiding: true,
+    paintable: false, paintableNote: 'Integral color — not paintable',
+    colorCount: 22, colorNames: [],colorHex:[],
+    warranty: 'Lifetime Limited',
+    costLow: 1.80, costHigh: 2.40,
+    desc: '3rd Generation modified polypropylene copolymer shake and shingle panels. ASTM D7254 compliant. Multiple profiles: Perfection Shingles, Rough-Split Shakes, Sawmill Shingles.',
+    specs: [['Material','Modified polypropylene copolymer'],['Standard','ASTM D7254'],['Gen.','3rd Generation (3G)'],['Format','Individual or panel'],['Warranty','Lifetime Limited']],
+    imgUrl: '', sourceUrl: 'https://www.certainteed.com/siding/cedar-impressions/'
+  },
+  {
+    id: 6, supplier: 'CertainTeed', name: 'Mainstreet™ Siding',
+    material: 'Vinyl', profile: 'Horizontal Lap',
+    thickness: '.040"', width: '4" or 5"', length: 'Standard (12 ft)',
+    lengthFt: 12, flag9ft: true, exteriorSiding: true,
+    paintable: false, paintableNote: 'Integral color — not paintable',
+    colorCount: 16, colorNames: [],colorHex:[],
+    warranty: 'Limited',
+    costLow: 0.45, costHigh: 0.65,
+    desc: 'Entry-level vinyl siding offering reliable performance and value. Good selection of popular colors. Ideal for budget-conscious projects and rental properties.',
+    specs: [['Profile','Horizontal Lap'],['Thickness','.040"'],['Length','12 ft standard'],['Warranty','Limited']],
+    imgUrl: '', sourceUrl: 'https://www.certainteed.com/siding/mainstreet/'
+  },
+  {
+    id: 7, supplier: 'Wolverine', name: 'Groveland™ 040 Siding',
+    material: 'Vinyl', profile: 'Horizontal Lap — Low-Gloss Natural Oak Woodgrain',
+    thickness: '.040"', width: '5"', length: 'Standard (12 ft)',
+    lengthFt: 12, flag9ft: true, exteriorSiding: true,
+    paintable: false, paintableNote: 'Integral color — not paintable',
+    colorCount: 18, colorNames: [],colorHex:[],
+    warranty: 'Lifetime Limited',
+    costLow: 0.90, costHigh: 1.15,
+    desc: 'New in 2025. Premium vinyl with low-gloss natural oak woodgrain emboss. Insta-Lock™ interlocking system for fast installation. 1/2" panel projection. Distributed through Erie Materials alongside CertainTeed.',
+    specs: [['Profile','Horizontal Lap'],['Thickness','.040"'],['Projection','1/2"'],['Lock System','Insta-Lock™'],['New','2025 catalog'],['Warranty','Lifetime Limited']],
+    imgUrl: 'https://wolverinesiding.com/wp-content/uploads/groveland-siding-main.jpg', sourceUrl: 'https://wolverinesiding.com/product/groveland/'
+  },
+  {
+    id: 8, supplier: 'Foundry', name: 'Grayne® Shingle Siding 5" Exposure',
+    material: 'Vinyl', profile: 'Individual Shingle — 5" Exposure',
+    thickness: 'Panel', width: '5" exposure', length: 'Individual shingle / panel',
+    lengthFt: 4, flag9ft: false, exteriorSiding: true,
+    paintable: false, paintableNote: 'Integral color — not paintable; 250+ custom colors',
+    colorCount: 31, colorNames: ['Moonlight','Gray Skies','Marine Blue','Modern Slate','Ironstone','Lakeside Blue','Aspen Brown'],
+    colorHex: ['#d4d8de','#9aa0a8','#1a4a6e','#6b6b72','#3d3d3d','#3a6480','#7a5c3a'],
+    warranty: '50-Year Limited',
+    costLow: 1.50, costHigh: 2.00,
+    desc: 'PVC shingle siding cast from 72 genuine cedar and stone molds for maximum realism. 31 standard colors plus 250+ custom color options. White cedar shake aesthetic.',
+    specs: [['Material','PVC / Polypropylene'],['Exposure','5"'],['Molds','72 genuine cedar/stone'],['Standard Colors','31 + 250 custom'],['Warranty','50-Year Limited']],
+    imgUrl: '', sourceUrl: 'https://foundrysiding.com/products/grayne/'
+  },
+  {
+    id: 9, supplier: 'Foundry', name: 'Grayne® Shingle Siding 7.5" Exposure',
+    material: 'Vinyl', profile: 'Individual Shingle — 7.5" Exposure — Weathered Palette',
+    thickness: 'Panel', width: '7.5" exposure', length: 'Individual shingle',
+    lengthFt: 4, flag9ft: false, exteriorSiding: true,
+    paintable: false, paintableNote: 'Integral color — not paintable',
+    colorCount: 9, colorNames: ['Arizona Clay','Reclaimed Cedar','Midnight Cloud','Denim','Ironstone'],
+    colorHex: ['#c4875a','#8b5e3c','#4a4e54','#3d5a80','#3d3d3d'],
+    warranty: '50-Year Limited',
+    costLow: 1.50, costHigh: 2.00,
+    desc: 'Wider 7.5" exposure PVC shingle in the exclusive Weathered palette. Red cedar shake aesthetic. Cast from real cedar molds for authentic grain, shadow lines, and texture variation.',
+    specs: [['Material','PVC / Polypropylene'],['Exposure','7.5"'],['Palette','9 Weathered colors'],['Molds','72 genuine cedar/stone'],['Warranty','50-Year Limited']],
+    imgUrl: '', sourceUrl: 'https://foundrysiding.com/products/grayne/'
+  },
+  {
+    id: 10, supplier: 'Tando', name: 'Beach House Shake™',
+    material: 'Composite', profile: 'Horizontal Shake Panel — 5" Exposure',
+    thickness: '5/8"', width: '42.63" W × 15" H per panel', length: '42.63" panel (3.55 ft)',
+    lengthFt: 3.55, flag9ft: false, exteriorSiding: true,
+    paintable: false, paintableNote: 'Integral color — not paintable',
+    colorCount: 12, colorNames: [],colorHex:[],
+    warranty: '50-Year Performance + 10-Year Appearance',
+    costLow: 2.50, costHigh: 3.50,
+    desc: 'Composite shake-look panels with coastal cedar aesthetic. Moisture impervious core. 11 panels per carton = 50 sq ft coverage. Installs 5× faster than individual cedar shingles. ICC and CCMC approved.',
+    specs: [['Material','Moisture-impervious composite'],['Exposure','5"'],['Panel Size','42.63" W × 15" H'],['Coverage','50 sq ft / carton'],['Approvals','ICC, CCMC'],['Warranty','50-yr Performance + 10-yr Appearance']],
+    imgUrl: 'https://www.tandocomposites.com/wp-content/uploads/2021/01/Beach-House-Shake-product.jpg', sourceUrl: 'https://www.tandocomposites.com/products/beach-house-shake/'
+  },
+  {
+    id: 11, supplier: 'Tando', name: 'TandoStone® Composite Stone Panels',
+    material: 'Composite', profile: 'Stacked Stone / Creek Ledgestone — Mortarless Panels',
+    thickness: '1.5"', width: 'Panel format', length: 'Panel',
+    lengthFt: 3, flag9ft: false, exteriorSiding: true,
+    paintable: false, paintableNote: 'Integral color — not paintable',
+    colorCount: 8, colorNames: [],colorHex:[],
+    warranty: '50-Year Performance Plus',
+    costLow: 4.00, costHigh: 6.00,
+    desc: 'New 2025 composite stone-look siding panels. Mortarless installation — no lath, adhesive, or scratch coat. Available in Stacked Stone and Creek Ledgestone styles. Lightweight alternative to natural stone.',
+    specs: [['Material','Composite stone-look'],['Styles','Stacked Stone, Creek Ledgestone'],['Install','Mortarless screw-hung'],['New','2025 catalog'],['Warranty','50-Year Performance Plus']],
+    imgUrl: '', sourceUrl: 'https://www.tandocomposites.com/products/tandostone/'
+  },
+  {
+    id: 12, supplier: 'Everlast', name: 'Everlast Horizontal Lap — 7" Reveal',
+    material: 'Composite', profile: 'Horizontal Lap — 7" Reveal',
+    thickness: '5/8"', width: '7" reveal', length: '12 ft and 16 ft',
+    lengthFt: 16, flag9ft: true, exteriorSiding: true,
+    paintable: false, paintableNote: 'Integral acrylic capstock — not paintable; color is permanent',
+    colorCount: 15, colorNames: ['Slate','Flagstone','Sandstone','Driftwood','Seagrass','Pebble','Bark','Midnight','Harbor','Sage','Granite','Clay','Sand','Linen','Charcoal'],
+    colorHex: ['#708090','#a0916d','#c8b89a','#b0a080','#8a9a70','#9a9080','#6b5040','#303030','#4a6070','#7a9a70','#807878','#c08060','#d4c090','#d8d0c0','#505050'],
+    warranty: 'Lifetime Performance + Lifetime Fade + Hail Damage',
+    costLow: 2.80, costHigh: 3.80,
+    desc: 'Co-extruded mineral composite substrate with 100% acrylic color capstock. CedarTouch® authentic wood-grain finish. EZStack joinery. No painting, caulking, or routine maintenance ever needed. Available in 12 ft and 16 ft planks to minimize seams.',
+    specs: [['Material','Mineral composite + acrylic capstock'],['Reveal','7"'],['Available Lengths','12 ft and 16 ft'],['Finish','CedarTouch® woodgrain'],['Colors','15 designer colors'],['Warranty','Lifetime Performance + Fade + Hail']],
+    imgUrl: 'https://www.everlastsiding.com/images/products/horizontal-lap/horizontal-lap-slate.jpg', sourceUrl: 'https://www.everlastsiding.com/products/horizontal-lap-siding/'
+  },
+  {
+    id: 13, supplier: 'Everlast', name: 'Everlast Horizontal Lap — 4.5" Reveal',
+    material: 'Composite', profile: 'Horizontal Lap — 4.5" Reveal',
+    thickness: '5/8"', width: '4.5" reveal', length: '12 ft and 16 ft',
+    lengthFt: 16, flag9ft: true, exteriorSiding: true,
+    paintable: false, paintableNote: 'Integral acrylic capstock — not paintable',
+    colorCount: 15, colorNames: ['Slate','Flagstone','Sandstone','Driftwood','Seagrass','Pebble','Bark','Midnight','Harbor','Sage','Granite','Clay','Sand','Linen','Charcoal'],
+    colorHex: ['#708090','#a0916d','#c8b89a','#b0a080','#8a9a70','#9a9080','#6b5040','#303030','#4a6070','#7a9a70','#807878','#c08060','#d4c090','#d8d0c0','#505050'],
+    warranty: 'Lifetime Performance + Lifetime Fade + Hail Damage',
+    costLow: 3.00, costHigh: 4.00,
+    desc: 'Same award-winning Everlast mineral composite construction in a narrower 4.5" reveal for a more traditional appearance. 12 ft and 16 ft planks. CedarTouch® finish. Zero maintenance.',
+    specs: [['Material','Mineral composite + acrylic capstock'],['Reveal','4.5"'],['Available Lengths','12 ft and 16 ft'],['Finish','CedarTouch® woodgrain'],['Colors','15 designer colors'],['Warranty','Lifetime Performance + Fade + Hail']],
+    imgUrl: '', sourceUrl: 'https://www.everlastsiding.com/products/horizontal-lap-siding/'
+  },
+  {
+    id: 14, supplier: 'Everlast', name: 'Everlast Board & Batten',
+    material: 'Composite', profile: 'Vertical Board & Batten — 11" Reveal',
+    thickness: '5/8"', width: '11" reveal (9" face + 2" integral batten)', length: '10 ft and 12 ft',
+    lengthFt: 12, flag9ft: true, exteriorSiding: true,
+    paintable: false, paintableNote: 'Integral acrylic capstock — not paintable',
+    colorCount: 10, colorNames: ['Slate','Flagstone','Sandstone','Driftwood','Bark','Midnight','Granite','Clay','Linen','Charcoal'],
+    colorHex: ['#708090','#a0916d','#c8b89a','#b0a080','#6b5040','#303030','#807878','#c08060','#d8d0c0','#505050'],
+    warranty: 'Lifetime Performance + Lifetime Fade + Hail Damage',
+    costLow: 3.20, costHigh: 4.20,
+    desc: 'Vertical Board & Batten with rough-sawn cedar aesthetic. 2" integral batten with 9" face board for authentic B&B look. Available in 10 ft and 12 ft lengths. Same zero-maintenance composite as horizontal lap line.',
+    specs: [['Material','Mineral composite + acrylic capstock'],['Profile','Vertical B&B'],['Reveal','11" (9" face + 2" batten)'],['Lengths','10 ft and 12 ft'],['Finish','Rough-sawn cedar'],['Warranty','Lifetime Performance + Fade + Hail']],
+    imgUrl: '', sourceUrl: 'https://www.everlastsiding.com/products/board-and-batten/'
+  },
+  {
+    id: 15, supplier: 'James Hardie', name: 'HardiePlank® Lap Siding',
+    material: 'Fiber Cement', profile: 'Horizontal Lap — Cedarmill, Smooth, or Select Textures',
+    thickness: '5/16"', width: '7.25" or 8.25" (nominal)', length: '12 ft',
+    lengthFt: 12, flag9ft: true, exteriorSiding: true,
+    paintable: true, paintableNote: 'Primed boards are field-paintable with any exterior paint; OR factory ColorPlus® baked finish',
+    colorCount: 30, colorNames: ['Arctic White','Cobblestone','Monterey Taupe','Evening Blue','Sandstone Beige','Chestnut Brown','Autumn Tan','Countrylane Red'],
+    colorHex: ['#f5f5f5','#c0b8a8','#a09080','#3a5a7a','#d4c8a8','#8a6040','#d4a870','#a03020'],
+    warranty: '30-Year Limited',
+    costLow: 0.80, costHigh: 1.20,
+    desc: 'America's most popular siding. Fiber cement construction. ASTM C1186 Grade II Type A. Flame spread 0 — noncombustible per ASTM E136. Hail resistant. Resists moisture, rot, insects, and fire. Primed or factory ColorPlus® technology.',
+    specs: [['Material','Fiber cement'],['Standard','ASTM C1186 Grade II Type A'],['Thickness','5/16"'],['Width','7.25" or 8.25" nominal'],['Length','12 ft'],['Flame Spread','0 (noncombustible)'],['Warranty','30-Year Limited']],
+    imgUrl: 'https://www.jameshardie.com/hubfs/JH_Products_HardiePlank_CedarMill.jpg', sourceUrl: 'https://www.jameshardie.com/products/hardieplank-lap-siding'
+  },
+  {
+    id: 16, supplier: 'James Hardie', name: 'Artisan® Lap Siding',
+    material: 'Fiber Cement', profile: 'Premium Thick-Edge Horizontal Lap',
+    thickness: '3/8" (thick-edge profile)', width: '4.5" to 8.5"', length: '12 ft',
+    lengthFt: 12, flag9ft: true, exteriorSiding: true,
+    paintable: true, paintableNote: 'Primed = field paintable; or factory ColorPlus® finish',
+    colorCount: 30, colorNames: ['Arctic White','Evening Blue','Chestnut Brown','Cobblestone'],
+    colorHex: ['#f5f5f5','#3a5a7a','#8a6040','#c0b8a8'],
+    warranty: '30-Year Limited',
+    costLow: 1.20, costHigh: 1.80,
+    desc: 'Premium fiber cement lap siding with a thick, deep-shadowed wood-look profile. Wider face with pronounced reveal creates a bold, upscale appearance. Same noncombustible fiber cement construction as HardiePlank.',
+    specs: [['Material','Fiber cement'],['Thickness','3/8" thick-edge'],['Width','4.5"–8.5"'],['Length','12 ft'],['Flame Spread','0'],['Warranty','30-Year Limited']],
+    imgUrl: '', sourceUrl: 'https://www.jameshardie.com/products/artisan-lap-siding'
+  },
+  {
+    id: 17, supplier: 'James Hardie', name: 'HardiePanel® Vertical Siding',
+    material: 'Fiber Cement', profile: 'Vertical Panel / Board & Batten',
+    thickness: '5/16"', width: '48" (4 ft)', length: '8 ft or 10 ft sheets',
+    lengthFt: 10, flag9ft: true, exteriorSiding: true,
+    paintable: true, paintableNote: 'Primed = field paintable; or factory ColorPlus® finish',
+    colorCount: 30, colorNames: [],colorHex:[],
+    warranty: '30-Year Limited',
+    costLow: 0.70, costHigh: 1.00,
+    desc: 'Fiber cement vertical panel siding for board-and-batten or smooth panel looks. Often used in combination with HardiePlank lap siding for contrasting accents. Available primed for field painting.',
+    specs: [['Material','Fiber cement'],['Thickness','5/16"'],['Panel Width','48" (4 ft)'],['Length','8 ft or 10 ft'],['Textures','Cedarmill, Smooth, Stucco'],['Warranty','30-Year Limited']],
+    imgUrl: '', sourceUrl: 'https://www.jameshardie.com/products/hardiepanel-vertical-siding'
+  },
+  {
+    id: 18, supplier: 'LP SmartSide', name: 'LP SmartSide® Lap Siding',
+    material: 'Engineered Wood', profile: 'Horizontal Lap — Multiple Widths',
+    thickness: '7/16"', width: '6", 8", 10", 12" nominal', length: '16 ft',
+    lengthFt: 16, flag9ft: true, exteriorSiding: true,
+    paintable: true, paintableNote: 'Primed = field paintable; OR 16 ExpertFinish® factory prefinished colors',
+    colorCount: 16, colorNames: ['Garden Sage','Cavern Steel','Quarry Gray','Weathered Walnut','Baltic Blue','Timber Frame','Autumn Bronze','Cream'],
+    colorHex: ['#7a9060','#5a6570','#808080','#6b4c2a','#2a4a60','#8a7060','#a06030','#f0e8d0'],
+    warranty: '5/50-Year Limited',
+    costLow: 0.90, costHigh: 1.40,
+    desc: 'Engineered wood siding with SmartGuard® process treating the substrate to the core against moisture, fungal decay, and insects. 16 ft planks minimize seams. Resists winds up to 200 mph. Available primed or in 16 ExpertFinish® factory colors.',
+    specs: [['Material','SmartGuard® engineered wood'],['Thickness','7/16"'],['Widths','6", 8", 10", 12"'],['Length','16 ft'],['Wind Resistance','200 mph'],['Warranty','5/50-Year Limited']],
+    imgUrl: 'https://lpcorp.com/content/dam/lpcorp/products/siding/smartside-lap-hero.jpg', sourceUrl: 'https://lpcorp.com/products/siding-trim/smartside-lap-siding/'
+  },
+  {
+    id: 19, supplier: 'LP SmartSide', name: 'LP SmartSide® Panel Siding (Vertical)',
+    material: 'Engineered Wood', profile: 'Vertical Panel / Board & Batten',
+    thickness: '7/16"', width: '48" (4 ft)', length: '9 ft',
+    lengthFt: 9, flag9ft: true, exteriorSiding: true,
+    paintable: true, paintableNote: 'Primed = field paintable; OR ExpertFinish® factory colors',
+    colorCount: 16, colorNames: [],colorHex:[],
+    warranty: '5/50-Year Limited',
+    costLow: 0.75, costHigh: 1.10,
+    desc: 'Engineered wood vertical panel siding for board-and-batten looks. Same SmartGuard® moisture, fungal, and insect protection. 4×9 ft sheets. Available primed or ExpertFinish® prefinished. 9 ft height meets the 9-ft threshold.',
+    specs: [['Material','SmartGuard® engineered wood'],['Thickness','7/16"'],['Width','48" (4 ft)'],['Height','9 ft'],['Grooves','8", 4", or no groove options'],['Warranty','5/50-Year Limited']],
+    imgUrl: '', sourceUrl: 'https://lpcorp.com/products/siding-trim/smartside-panel-siding/'
+  },
+  {
+    id: 20, supplier: 'LP SmartSide', name: 'DiamondKote® LP SmartSide',
+    material: 'Engineered Wood', profile: 'Horizontal Lap — DiamondKote Pre-finished',
+    thickness: '7/16"', width: 'Multiple', length: '16 ft',
+    lengthFt: 16, flag9ft: true, exteriorSiding: true,
+    paintable: false, paintableNote: 'Factory DiamondKote finish — painting voids warranty; 30-Year No Fade Guarantee',
+    colorCount: 20, colorNames: [],colorHex:[],
+    warranty: '30-Year No Fade + 5/50-Year LP SmartSide',
+    costLow: 1.20, costHigh: 1.80,
+    desc: 'LP SmartSide engineered wood with DiamondKote baked-on factory finish applied by certified pre-finishers. Industry-leading 30-Year No Fade Warranty. Never needs painting. Consistent color from top to bottom of every plank.',
+    specs: [['Material','SmartGuard® engineered wood'],['Finish','DiamondKote® baked factory coat'],['Length','16 ft'],['Fade Warranty','30-Year No Fade Guarantee'],['Certifier','LP SmartSide Preferred Pre-finisher'],['Warranty','5/50-Year LP + 30-yr DiamondKote']],
+    imgUrl: '', sourceUrl: 'https://www.diamondkote.com/lp-smartside/'
+  },
+  {
+    id: 21, supplier: 'Alsco', name: 'Alsco Aluminum Siding',
+    material: 'Aluminum', profile: 'Horizontal Lap — Woodgrain or Smooth',
+    thickness: '.019" or .024"', width: '4" or 8" clapboard', length: 'Standard (12 ft)',
+    lengthFt: 12, flag9ft: true, exteriorSiding: true,
+    paintable: true, paintableNote: 'Paintable with appropriate aluminum primer + exterior paint; 28 standard + 350+ custom colors',
+    colorCount: 378, colorNames: ['Arctic White','Linen','Autumn Gold','Rustic Brown','Charcoal'],
+    colorHex: ['#f5f5f5','#f0e8d8','#d4a840','#8a6040','#505050'],
+    warranty: 'Limited Lifetime',
+    costLow: 1.40, costHigh: 2.00,
+    desc: 'NEW in 2025 Erie Materials catalog. Dymalar® 2000 baked-on coating. 28 Perfect Trim Plus colors + 350+ Color Select custom colors matching CertainTeed, Royal, Hardie, Mastic, Stylecrest palettes. Largest residential aluminum siding supplier in North America. AAMA 1402 compliant. Non-toxic, recyclable.',
+    specs: [['Material','Aluminum'],['Coating','Dymalar® 2000 baked-on'],['Gauge','.019" or .024"'],['Standard','AAMA 1402'],['Colors','28 standard + 350+ custom'],['New','2025 Erie catalog']],
+    imgUrl: '', sourceUrl: 'https://alscometals.com/products/aluminum-siding/'
+  },
+  {
+    id: 22, supplier: 'Cedar Valley', name: 'Cedar Valley Shingle Panels — 7-1/8" Exposure',
+    material: 'Cedar', profile: 'Western Red Cedar Shingles on Plywood Backer — 7-1/8" Exposure',
+    thickness: '1/2" total panel', width: '8 ft panel', length: '8 ft',
+    lengthFt: 8, flag9ft: false, exteriorSiding: true,
+    paintable: true, paintableNote: 'Natural cedar — accepts any exterior stain or paint',
+    colorCount: 0, colorNames: [],colorHex:[],
+    warranty: '15-Year Limited',
+    costLow: 3.50, costHigh: 5.00,
+    desc: '#1 Grade Rebutted & Rejoined Kiln-Dried Western Red Cedar shingles on 11/32" Douglas Fir CCX plywood backer. Elk VersaShield fiberglass interlayer. Handcrafted. 21 pieces per 100 sq ft. Installs 4× faster than individual shingles. Accept any stain or paint. Note: 8 ft panel — just under 9 ft flag threshold.',
+    specs: [['Material','#1 Grade Western Red Cedar'],['Backer','11/32" Douglas Fir CCX Plywood'],['Interlayer','Elk VersaShield fiberglass'],['Panel Length','8 ft'],['Exposure','7-1/8"'],['Total Thickness','1/2"'],['Warranty','15-Year Limited']],
+    imgUrl: 'https://cedar-valley.com/wp-content/uploads/cedar-valley-shingle-panel.jpg', sourceUrl: 'https://cedar-valley.com/products/'
+  },
+  {
+    id: 23, supplier: 'Cedar Valley', name: 'Cedar Valley Shingle Panels — 5.3" Exposure',
+    material: 'Cedar', profile: 'Western Red Cedar Shingles on Plywood Backer — 5.3" Exposure',
+    thickness: '1/2" total panel', width: '8 ft panel', length: '8 ft',
+    lengthFt: 8, flag9ft: false, exteriorSiding: true,
+    paintable: true, paintableNote: 'Natural cedar — accepts any exterior stain or paint',
+    colorCount: 0, colorNames: [],colorHex:[],
+    warranty: '15-Year Limited',
+    costLow: 3.80, costHigh: 5.50,
+    desc: 'Same #1 Grade Western Red Cedar construction as 7-1/8" panels but with tighter 5.3" exposure for a more traditional appearance. 11/32" Douglas Fir plywood backer. Elk VersaShield fiberglass interlayer.',
+    specs: [['Material','#1 Grade Western Red Cedar'],['Backer','11/32" Douglas Fir CCX Plywood'],['Interlayer','Elk VersaShield fiberglass'],['Panel Length','8 ft'],['Exposure','5.3"'],['Total Thickness','1/2"'],['Warranty','15-Year Limited']],
+    imgUrl: '', sourceUrl: 'https://cedar-valley.com/products/'
+  },
+  {
+    id: 24, supplier: 'RISE', name: 'RISE® Panels — 12" Smooth',
+    material: 'Composite', profile: 'Horizontal Lap / Plank — 12" Width — Smooth Face',
+    thickness: '1"', width: '12"', length: '13 ft 4 in (160")',
+    lengthFt: 13.33, flag9ft: true, exteriorSiding: true,
+    paintable: true, paintableNote: 'Field paintable — smooth surface ideal for paint adhesion',
+    colorCount: 0, colorNames: [],colorHex:[],
+    warranty: '30-Year Limited',
+    costLow: 0.85, costHigh: 1.20,
+    desc: 'Made from 94% recycled materials (carpet fibers + fiberglass from wind turbine blades). Ground-contact approved. Cuts, routes, and fastens like wood — no special tools. Manufactured in Mankato, MN. Unique 13'4" length minimizes seams. ICC/Intertek certified.',
+    specs: [['Material','94% recycled composite'],['Recycled Content','Carpet + wind turbine fiberglass'],['Width','12"'],['Length','13 ft 4 in (160")'],['Ground Contact','Approved'],['Made in','USA (Mankato, MN)'],['Approvals','ICC, Intertek'],['Warranty','30-Year Limited']],
+    imgUrl: '', sourceUrl: 'https://risebuildingproducts.com/products/'
+  },
+  {
+    id: 25, supplier: 'RISE', name: 'RISE® Panels — 12" Textured',
+    material: 'Composite', profile: 'Horizontal Lap / Plank — 12" Width — Wood-Grain Texture',
+    thickness: '1"', width: '12"', length: '13 ft 4 in (160")',
+    lengthFt: 13.33, flag9ft: true, exteriorSiding: true,
+    paintable: true, paintableNote: 'Field paintable — textured wood-grain surface',
+    colorCount: 0, colorNames: [],colorHex:[],
+    warranty: '30-Year Limited',
+    costLow: 0.85, costHigh: 1.20,
+    desc: 'Same 94% recycled composite as smooth version but with realistic wood-grain texture emboss. 13'4" length unique to RISE. Freeze/thaw resistant. Impervious to rot, insects, and moisture.',
+    specs: [['Material','94% recycled composite'],['Width','12"'],['Length','13 ft 4 in (160")'],['Texture','Wood-grain emboss'],['Ground Contact','Approved'],['Warranty','30-Year Limited']],
+    imgUrl: '', sourceUrl: 'https://risebuildingproducts.com/products/'
+  },
+  {
+    id: 26, supplier: 'RISE', name: 'RISE® Panels — 8.25" Smooth',
+    material: 'Composite', profile: 'Horizontal Lap / Plank — 8.25" Width — Smooth Face',
+    thickness: '1"', width: '8.25"', length: '13 ft 4 in (160")',
+    lengthFt: 13.33, flag9ft: true, exteriorSiding: true,
+    paintable: true, paintableNote: 'Field paintable — smooth surface',
+    colorCount: 0, colorNames: [],colorHex:[],
+    warranty: '30-Year Limited',
+    costLow: 1.00, costHigh: 1.40,
+    desc: 'Narrower 8.25" wide version of RISE recycled composite panels. Traditional lap siding proportions. Same 13'4" length, same 94% recycled content. Installs and finishes like wood.',
+    specs: [['Material','94% recycled composite'],['Width','8.25"'],['Length','13 ft 4 in (160")'],['Texture','Smooth'],['Ground Contact','Approved'],['Warranty','30-Year Limited']],
+    imgUrl: '', sourceUrl: 'https://risebuildingproducts.com/products/'
+  },
+  {
+    id: 27, supplier: 'Versetta Stone', name: 'Versetta Stone® Ledgestone',
+    material: 'Stone', profile: 'Mortarless Concrete Stone Veneer Panels — Ledgestone',
+    thickness: '~1.5"', width: '8" H', length: '36" W panels',
+    lengthFt: 3, flag9ft: false, exteriorSiding: true,
+    paintable: false, paintableNote: 'Not paintable — integral mineral oxide pigments; color extends through panel',
+    colorCount: 7, colorNames: ['Plum Creek','Sterling','Mission Point','Northern Ash','Glen Canyon','Lunar Drift','Granite Peak'],
+    colorHex: ['#a07858','#c0b8a8','#b0a890','#b8b0a0','#c8a880','#e0d8c8','#808078'],
+    warranty: 'Lifetime Limited',
+    costLow: 8.00, costHigh: 12.00,
+    desc: 'Concrete + aggregate + mineral oxide pigments. Mortarless tongue-and-groove system — no lath, scratch coat, or adhesive needed. Screw-hung installation with built-in rainscreen gap. Installs like siding. 2 sq ft per panel.',
+    specs: [['Material','Concrete + aggregate + mineral oxide pigments'],['Panel Size','8" H × 36" W'],['Thickness','~1.5"'],['Coverage','2 sq ft per panel'],['Install','Mortarless T&G, screw-hung'],['Rainscreen','Built-in gap'],['Warranty','Lifetime Limited']],
+    imgUrl: 'https://www.westlakeroyalbuildingproducts.com/content/dam/versetta-stone/products/ledgestone-sterling.jpg', sourceUrl: 'https://www.westlakeroyalbuildingproducts.com/siding-and-accessories/versetta-stone/'
+  },
+  {
+    id: 28, supplier: 'Azek', name: 'Azek Captivate™ Board & Batten Siding',
+    material: 'Composite', profile: 'Vertical Board & Batten — Engineered PVC Polymer',
+    thickness: '1"', width: 'Variable board spacing', length: 'Standard lengths (up to 12 ft)',
+    lengthFt: 12, flag9ft: true, exteriorSiding: true,
+    paintable: true, paintableNote: 'PaintPro® Technology — engineered for long-lasting paint adhesion; extends cedar's 3–7 year paint cycle',
+    colorCount: 0, colorNames: [],colorHex:[],
+    warranty: 'Lifetime Limited (rot/split/splinter/warp)',
+    costLow: 2.50, costHigh: 3.80,
+    desc: 'Engineered polymer PVC siding with PaintPro® Technology for superior paint adhesion and durability. Rot-proof, split-proof, splinter-proof. Up to ~85% recycled material. Dramatically reduces cedar's frequent repaint cycle.',
+    specs: [['Material','Engineered PVC polymer'],['Technology','PaintPro® paint adhesion'],['Profile','Vertical Board & Batten'],['Recycled Content','~85%'],['Paintable','Yes — long-lasting bond'],['Warranty','Lifetime Limited']],
+    imgUrl: '', sourceUrl: 'https://www.azek.com/products/captivate-siding/'
+  },
+  {
+    id: 29, supplier: 'TruExterior', name: 'TruExterior® Siding',
+    material: 'Composite', profile: 'Horizontal Lap — Poly-Ash Composite',
+    thickness: '7/16" or 5/4"', width: 'Multiple', length: 'Standard (12 ft)',
+    lengthFt: 12, flag9ft: true, exteriorSiding: true,
+    paintable: true, paintableNote: 'Field paintable — poly-ash accepts primer and exterior paint; same workability as wood',
+    colorCount: 0, colorNames: [],colorHex:[],
+    warranty: '25-Year Limited',
+    costLow: 2.00, costHigh: 3.00,
+    desc: 'Poly-ash composite material from Westlake Royal. Highly resistant to moisture and dimensional movement. Works like wood — cuts, routes, and fastens with standard tools. Excellent paint adhesion. Moisture resistance far exceeds wood or fiber cement.',
+    specs: [['Material','Poly-ash composite (Boral/Westlake)'],['Thickness','7/16" or 5/4"'],['Moisture Resistance','Excellent — exceeds wood & fiber cement'],['Workability','Same as wood'],['Paintable','Yes'],['Warranty','25-Year Limited']],
+    imgUrl: '', sourceUrl: 'https://truexterior.com/products/siding/'
+  },
+  {
+    id: 30, supplier: 'Vesta Steel', name: 'Vesta Steel Siding',
+    material: 'Steel', profile: '5" Smooth Plank — 25-Gauge Steel',
+    thickness: '25-gauge', width: '5"', length: 'Standard (12 ft)',
+    lengthFt: 12, flag9ft: true, exteriorSiding: true,
+    paintable: false, paintableNote: 'Factory-finished steel — not recommended to repaint; 50-Year color warranty',
+    colorCount: 12, colorNames: ['Classic White','Linen','Almond','Sandstone','Pebble Gray','Wedgewood Blue','Forest Green','Rustic Brown','Adobe','Black','Autumn Red','Charcoal'],
+    colorHex: ['#f5f5f5','#f0e8d8','#f0d8a0','#d4c090','#b0b0a8','#6080a0','#3a6040','#8a6040','#c09060','#202020','#a03020','#505050'],
+    warranty: 'Residential Lifetime / 50-Year Commercial',
+    costLow: 2.00, costHigh: 3.00,
+    desc: 'American-made 25-gauge steel siding with wood-tone and solid color options. Quality Edge (Vesta brand). Superior dent, impact, and fire resistance vs. vinyl. Residential Lifetime warranty / 50-Year commercial warranty.',
+    specs: [['Material','25-gauge US steel'],['Profile','5" smooth plank'],['Length','12 ft'],['Warranty','Residential Lifetime / 50-yr Commercial']],
+    imgUrl: '', sourceUrl: 'https://qualityedge.com/vesta-steel-siding/'
+  }
+];
+
+// ========= RENDERING =========
+const colorMap = {
+  'Slate':'#708090','Flagstone':'#a0916d','Arctic White':'#f5f5f5','Evening Blue':'#3a5a7a',
+  'Midnight Cloud':'#4a4e54','Denim':'#3d5a80','Arizona Clay':'#c4875a','Reclaimed Cedar':'#8b5e3c',
+  'Moonlight':'#d4d8de','Marine Blue':'#1a4a6e','Ironstone':'#3d3d3d','Modern Slate':'#6b6b72',
+  'Aspen Brown':'#7a5c3a','Garden Sage':'#7a9060','Quarry Gray':'#808080',
+  'Weathered Walnut':'#6b4c2a','Cavern Steel':'#5a6570'
+};
+
+function renderSwatches(names, hexes) {
+  if (!names || names.length === 0) return '';
+  return names.map((n,i) => {
+    const hex = hexes && hexes[i] ? hexes[i] : (colorMap[n] || '#ccc');
+    const textColor = parseInt(hex.replace('#',''), 16) > 0xaaaaaa ? '#333' : '#fff';
+    return `<span class="swatch" title="${n}" style="background:${hex};border-color:${hex === '#f5f5f5' ? '#ccc' : hex}"></span>`;
+  }).join('');
+}
+
+function renderCard(p) {
+  const flagBadge = p.flag9ft
+    ? `<span class="badge badge-flag">&#128681; 9 FT+ FLAG &mdash; ${p.length}</span>`
+    : '';
+
+  const imgTag = p.imgUrl
+    ? `<img class="card-img" src="${p.imgUrl}" alt="${p.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="card-img-placeholder" style="display:none">${materialEmoji(p.material)}</div>`
+    : `<div class="card-img-placeholder">${materialEmoji(p.material)}</div>`;
+
+  const specRows = p.specs.map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+
+  let colorSection = '';
+  if (p.paintable) {
+    colorSection = `<div class="colors-section">
+      <div class="colors-label">Finish</div>
+      <span class="paintable-tag">&#10003; Paintable &mdash; ${p.paintableNote}</span>
+    </div>`;
+  } else if (p.colorNames && p.colorNames.length > 0) {
+    const extra = p.colorCount > p.colorNames.length ? `<span style="font-size:0.78rem;color:#666">+ ${p.colorCount - p.colorNames.length} more</span>` : '';
+    colorSection = `<div class="colors-section">
+      <div class="colors-label">Colors (${p.colorCount})</div>
+      <div class="color-swatches">${renderSwatches(p.colorNames, p.colorHex)}${extra}</div>
+      <div style="font-size:0.75rem;color:#888;margin-top:4px">${p.paintableNote}</div>
+    </div>`;
+  } else if (p.colorCount > 0) {
+    colorSection = `<div class="colors-section">
+      <div class="colors-label">Colors</div>
+      <div style="font-size:0.85rem;color:#555">${p.colorCount} colors available &mdash; ${p.paintableNote}</div>
+    </div>`;
+  } else {
+    colorSection = `<div class="colors-section">
+      <div class="paintable-tag">&#10003; Paintable / Stainable &mdash; ${p.paintableNote}</div>
+    </div>`;
+  }
+
+  const flagStrip = p.flag9ft
+    ? `<div class="flag-strip">&#128681; LONG-LENGTH FLAG: ${p.length} &mdash; Fewer seams, faster installation</div>`
+    : '';
+
+  return `
+  <div class="card" data-supplier="${p.supplier}" data-material="${p.material}" data-flag="${p.flag9ft}" data-paintable="${p.paintable}">
+    ${imgTag}
+    <div class="card-badges">
+      <span class="badge badge-supplier">${p.supplier}</span>
+      <span class="badge badge-material">${p.material}</span>
+      <span class="badge badge-exterior">&#127968; Exterior Siding</span>
+      ${flagBadge}
+    </div>
+    <div class="card-body">
+      <div class="card-title">${p.name}</div>
+      <div class="card-desc">${p.desc}</div>
+      <table class="specs-table">${specRows}</table>
+      ${colorSection}
+      <div class="cost-box">
+        <div>
+          <div class="cost-label">Estimated Material Cost</div>
+          <div class="cost-value">$${p.costLow.toFixed(2)}&ndash;$${p.costHigh.toFixed(2)}<span style="font-size:0.85rem;font-weight:400">/sq ft</span></div>
+        </div>
+        <div class="cost-note">Materials only &bull; Contact Erie Materials for current contractor pricing</div>
+      </div>
+    </div>
+    ${flagStrip}
+  </div>`;
+}
+
+function materialEmoji(mat) {
+  const map = {'Vinyl':'&#127968;','Fiber Cement':'&#127963;','Composite':'&#9851;','Engineered Wood':'&#127795;',
+    'Aluminum':'&#9878;','Steel':'&#9869;','Cedar':'&#127795;','Stone':'&#127956;'};
+  return map[mat] || '&#127968;';
+}
+
+function applyFilters() {
+  const supplier = document.getElementById('filterSupplier').value;
+  const material = document.getElementById('filterMaterial').value;
+  const flagOnly = document.getElementById('filterFlag').checked;
+  const paintOnly = document.getElementById('filterPaintable').checked;
+  let visible = 0;
+  document.querySelectorAll('.card').forEach(card => {
+    const matchSupplier = !supplier || card.dataset.supplier === supplier;
+    const matchMaterial = !material || card.dataset.material === material;
+    const matchFlag = !flagOnly || card.dataset.flag === 'true';
+    const matchPaint = !paintOnly || card.dataset.paintable === 'true';
+    const show = matchSupplier && matchMaterial && matchFlag && matchPaint;
+    card.classList.toggle('hidden', !show);
+    if (show) visible++;
+  });
+  document.getElementById('countBadge').textContent = visible + ' product' + (visible !== 1 ? 's' : '');
+}
+
+// Render all products
+const grid = document.getElementById('productGrid');
+grid.innerHTML = products.map(renderCard).join('');
+applyFilters();
+</script>
+</body>
+</html>
